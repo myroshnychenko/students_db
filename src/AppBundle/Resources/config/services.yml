@@ -1,0 +1,24 @@
+#services:
+#    app.example:
+#        class:     AppBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
+#        calls:
+#            - [setService, ["@service_id"]]
+#        tags:
+#            - { name: twig.extension }
+#            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+services:
+
+    app.unique_path_finder:
+        class: AppBundle\Service\UniquePathFinderService
+
+    app.student_generate_path:
+        class: AppBundle\Service\StudentGeneratePathService
+        arguments: ["@app.unique_path_finder", "@doctrine.orm.entity_manager"]
+
+    app.command.student_generate_path_command:
+        class: AppBundle\Command\StudentGeneratePathCommand
+        arguments: ["@app.student_generate_path"]
+        tags:
+            -  { name: console.command }

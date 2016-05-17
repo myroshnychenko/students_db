@@ -2,20 +2,28 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Student;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/students/detail/{path}", name="detail_page")
+     *
+     * @param Student $student
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request)
+    public function indexAction(Student $student)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
+        $response = $this->render('default/index.html.twig', [
+            'student' => $student,
+            'timestamp' => new \DateTime()
         ]);
+
+        $response->setSharedMaxAge(60);
+
+        return $response;
     }
 }
